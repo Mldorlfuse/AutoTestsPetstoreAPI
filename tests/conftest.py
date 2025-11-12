@@ -1,21 +1,37 @@
 import pytest
+import os
 from faker import Faker
 from api.pet_api import PetAPI
 # from api.user_api import UserAPI
 # from api.store_api import StoreAPI
 
-BASE_URL = "https://petstore.swagger.io/v2"
+
+BASE_URL = 'https://petstore.swagger.io/v2'
 fake = Faker()
 
-
-@pytest.fixture(scope="session")
+@pytest.fixture(scope='session')
 def base_url():
     return BASE_URL
 
+@pytest.fixture
+def file_path():
+    current_dir = os.path.dirname(__file__)
+    project_root = os.path.abspath(os.path.join(current_dir, ".."))
+    path = os.path.join(project_root, "img", "cat.png")
+    if not os.path.exists(path):
+        raise FileNotFoundError(f"Файл не найден: {path}")
+    return path
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope='session')
 def pet_api(base_url):
     return PetAPI(base_url)
+
+@pytest.fixture()
+def create_pet(pet_api, pet_data):
+    response_add_pet = pet_api.add_pet(pet_data)
+    yield response_add_pet
+
+
 
 
 # @pytest.fixture(scope="session")
@@ -31,9 +47,16 @@ def pet_api(base_url):
 @pytest.fixture
 def pet_data():
     return {
-        "id": fake.random_int(min=100000, max=999999),
-        "name": fake.first_name(),
-        "status": fake.random_element(["available", "pending", "sold"]),
+        'id': fake.random_int(min=100000, max=999999),
+        'name': fake.first_name(),
+        'status': fake.random_element(['available', 'pending', 'sold'])
+    }
+
+@pytest.fixture
+def new_pet_data():
+    return {
+        'name': fake.first_name(),
+        'status': fake.random_element(['available', 'pending', 'sold'])
     }
 
 
