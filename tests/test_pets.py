@@ -37,8 +37,6 @@ def test_find_by_status_pet(create_pet, pet_api, pet_data):
     response_find_by_status = pet_api.find_pet_by_status(pet_data['status'])
     pet_api.check_pet_after_find_by_status(create_pet, response_find_by_status, pet_data['status'])
 
-# Ооооочнь редко срабатывает
-
 @allure.epic("Petstore API")
 @allure.feature("Pet")
 @allure.story("Изменение питомца по id")
@@ -58,7 +56,7 @@ def test_update_pet_by_id(create_pet, pet_api, pet_data, new_pet_data):
 @allure.feature("Pet")
 @allure.story("Удаление питомца по id")
 def test_delete_pet(create_pet, pet_api):
-    
+
     response_delete = pet_api.delete_pet(create_pet.json()['id'])
     response_get_pet = pet_api.get_pet(create_pet.json()['id'])
     pet_api.check_pet_after_delete(response_delete, create_pet.json()['id'], response_get_pet)

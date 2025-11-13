@@ -3,7 +3,7 @@ import os
 from faker import Faker
 from api.pet_api import PetAPI
 from api.store_api import StoreAPI
-# from api.user_api import UserAPI
+from api.user_api import UserAPI
 from datetime import datetime, timezone
 
 
@@ -41,12 +41,18 @@ def store_api(base_url):
 def create_order(store_api, store_order_data):
     response_order = store_api.new_order(store_order_data)
     yield response_order
+    store_api.delete_order(response_order.json()['id'])
 
-# @pytest.fixture(scope="session")
-# def user_api(base_url):
-#     return UserAPI(base_url)
-#
-#
+@pytest.fixture(scope="session")
+def user_api(base_url):
+    return UserAPI(base_url)
+
+@pytest.fixture()
+def create_user(user_api, user_data):
+    response_create_user = user_api.create_user(user_data)
+    yield response_create_user
+    user_api.delete_user(user_data['username'])
+
 
 
 
@@ -79,14 +85,30 @@ def store_order_data():
 
 @pytest.fixture
 def user_data():
-    username = fake.user_name()
     return {
         "id": fake.random_int(min=10000, max=99999),
-        "username": username,
+        "username": fake.user_name(),
         "firstName": fake.first_name(),
         "lastName": fake.last_name(),
         "email": fake.email(),
-        "password": "Test123!",
+        "password": fake.password(),
         "phone": fake.phone_number(),
-        "userStatus": 1,
+        "userStatus": fake.random_int(min=1, max=3),
     }
+
+@pytest.fixture
+def new_user_data():
+    return {
+        "id": fake.random_int(min=10000, max=99999),
+        "username": fake.user_name(),
+        "firstName": fake.first_name(),
+        "lastName": fake.last_name(),
+        "email": fake.email(),
+        "password": fake.password(),
+        "phone": fake.phone_number(),
+        "userStatus": fake.random_int(min=1, max=3),
+    }
+
+@pytest.fixture
+def get_random_user_count():
+    return fake.random_int(min=1, max=5)

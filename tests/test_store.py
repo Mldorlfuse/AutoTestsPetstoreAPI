@@ -1,5 +1,5 @@
 import allure
-import pytest
+
 
 
 @allure.epic("Petstore API")
