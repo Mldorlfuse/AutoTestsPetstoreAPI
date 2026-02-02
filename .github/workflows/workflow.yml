@@ -32,7 +32,7 @@ jobs:
       - name: Generate report
         run: allure generate -c allure-results -o _site
       - name: Save allure report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: _site
           path: _site
