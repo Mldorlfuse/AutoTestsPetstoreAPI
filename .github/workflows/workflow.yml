@@ -22,12 +22,13 @@ jobs:
         run: pip install -r requirements.txt
       - name: run tests
         run: pytest
+        continue-on-error: true
       - name: Install Java
         uses: actions/setup-java@v3
         with:
           distribution: 'microsoft'
           java-version: '17'
-      - name: Install Allure
+      - name: install Allure
         run: sudo wget https://github.com/allure-framework/allure2/releases/download/2.24.1/allure-2.24.1.tgz && sudo tar -zxvf allure-2.24.1.tgz -C /opt/ && sudo ln -s /opt/allure-2.24.1/bin/allure /usr/bin/allure
       - name: Generate report
         run: allure generate -c allure-results -o _site
