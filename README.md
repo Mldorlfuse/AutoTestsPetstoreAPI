@@ -1,6 +1,7 @@
 # Автотесты для Petstore API
 
 Этот проект содержит автоматические тесты для [Swagger Petstore API](https://petstore.swagger.io/#/store). Тесты написаны на Python с использованием `pytest` и интеграцией с Allure для отчетов.
+Также настроен github actions
 
 # Установка
 
